@@ -3,7 +3,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "myname" {
-  name     = "rgnew"
+  count    = 3
+  name     = "rgnew${count.index}"
   location = "eastus"
 }
 
@@ -19,7 +20,7 @@ resource "azurerm_subnet" "myname" {
   virtual_network_name = azurerm_virtual_network.myname.name
   address_prefixes     = ["10.0.0.0/24"]
   #depends on vnet to created before creating subnet
-  depends_on = [azurerm_virtual_network.myname]
+  depends_on          = [azurerm_virtual_network.myname]
   resource_group_name = azurerm_resource_group.myname.name
 }
 
@@ -29,8 +30,8 @@ resource "azurerm_network_interface" "myname" {
   resource_group_name = azurerm_resource_group.myname.name
   depends_on          = [azurerm_subnet.myname]
   ip_configuration {
-    name      = "primary"
-    subnet_id = azurerm_subnet.myname.id
+    name                          = "primary"
+    subnet_id                     = azurerm_subnet.myname.id
     private_ip_address_allocation = "Dynamic"
   }
 }
