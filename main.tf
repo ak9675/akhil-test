@@ -10,24 +10,24 @@ resource "azurerm_resource_group" "myname" {
 
 resource "azurerm_virtual_network" "myname" {
   name                = "vnet-test"
-  location            = azurerm_resource_group.myname.location
-  resource_group_name = azurerm_resource_group.myname.name
+  location            = azurerm_resource_group.myname[0].location
+  resource_group_name = azurerm_resource_group.myname[0].name
   address_space       = ["10.0.0.0/16"]
 }
 
 resource "azurerm_subnet" "myname" {
   name                 = "subnet-test"
-  virtual_network_name = azurerm_virtual_network.myname.name
+  virtual_network_name = azurerm_virtual_network.myname[0].name
   address_prefixes     = ["10.0.0.0/24"]
   #depends on vnet to created before creating subnet
   depends_on          = [azurerm_virtual_network.myname]
-  resource_group_name = azurerm_resource_group.myname.name
+  resource_group_name = azurerm_resource_group.myname[0].name
 }
 
 resource "azurerm_network_interface" "myname" {
   name                = "nic-test"
-  location            = azurerm_resource_group.myname.location
-  resource_group_name = azurerm_resource_group.myname.name
+  location            = azurerm_resource_group.myname[0].location
+  resource_group_name = azurerm_resource_group.myname[0].name
   depends_on          = [azurerm_subnet.myname]
   ip_configuration {
     name                          = "primary"
