@@ -17,7 +17,7 @@ resource "azurerm_virtual_network" "myname" {
 
 resource "azurerm_subnet" "myname" {
   name                 = "subnet-test"
-  virtual_network_name = azurerm_virtual_network.myname[0].name
+  virtual_network_name = azurerm_virtual_network.myname.name
   address_prefixes     = ["10.0.0.0/24"]
   #depends on vnet to created before creating subnet
   depends_on          = [azurerm_virtual_network.myname]
